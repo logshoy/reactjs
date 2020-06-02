@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.scss';
 import {Route, NavLink, Switch, Redirect} from 'react-router-dom'
+import {connect} from 'react-redux'
 import Car from './Car/Car'
 import Cars2 from './Cars2/Cars2'
 import CarDetail from './CarDetail/CarDetail'
@@ -11,6 +12,8 @@ import Counter from './Counter/Counter'
 export const ClikedContext = React.createContext(false)
 
 class App extends React.Component {
+
+
 
   constructor(props) {
     console.log("App constructor")
@@ -27,6 +30,13 @@ class App extends React.Component {
       pageTitle: "React Components",
       showCars: false
     }
+  }
+
+  
+  updateCounter(value) {
+    this.setState({
+      counter: this.state.counter + value
+    })
   }
 
   onChangeName(name, index) {
@@ -54,16 +64,8 @@ class App extends React.Component {
     this.setState({cars})
   }
 
-  componentWillMount() {
-    console.log('App componentWillMount')
-  }
-
-  componentDidMount() {
-    console.log('App componentDidMount')
-  }
-
   render () {
-    console.log('App render')
+    console.log(this.props)
   const divStyle = {
     textAlign : "center"
   }
@@ -113,6 +115,16 @@ class App extends React.Component {
           </ul>
         </nav> 
 
+        <h1>Счетчик <strong>{this.props.counter}</strong></h1>
+
+        <hr/>
+
+        <div className="Actions">
+          <button onClick={this.props.onAdd}>Добавить 1</button>
+          <button onClick={this.props.onSub}>Вычесть 1</button>
+          <button onClick={this.props.onAdd10}>Добавить 10</button>
+        </div>
+
         <hr />
         <div style={{
           textAlign: 'center'
@@ -127,10 +139,6 @@ class App extends React.Component {
           {this.state.isLoggedIn ? <Route path="/about" component={About}/> : null }
           <Route path="/cars" component={Cars2}/>
           <Redirect to={'/'}/>
-          {/* <Route render={() => <h1 style={{
-            color: 'red',
-            textAlign: 'center'
-          }}>404 not found</h1>}/> */}
          </Switch>
       <ClikedContext.Provider value={this.state.cliked}> 
         <Counter cliked={this.state.cliked} />
@@ -159,4 +167,18 @@ class App extends React.Component {
   }
 }
 
-export default App;
+function mapStateToProp(state) {
+  return {
+    counter: state.counter
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+   return {
+     onAdd: () => dispatch({type: 'ADD'}),
+     onSub: () => dispatch({type: 'SUB'}),
+     onAdd10: () => dispatch({type: 'ADD10'})
+   }
+}
+
+export default connect(mapStateToProp, mapDispatchToProps)(App);
