@@ -8,6 +8,8 @@ import CarDetail from './CarDetail/CarDetail'
 import About from './About/About'
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
 import Counter from './Counter/Counter'
+import {add, sub, addNumber, subNumber, asyncAdd} from './Redux/actions/actions'
+
  
 export const ClikedContext = React.createContext(false)
 
@@ -122,7 +124,17 @@ class App extends React.Component {
         <div className="Actions">
           <button onClick={this.props.onAdd}>Добавить 1</button>
           <button onClick={this.props.onSub}>Вычесть 1</button>
-          <button onClick={this.props.onAdd10}>Добавить 10</button>
+        </div>
+
+        <div className="Actions">
+          <button onClick={ () => this.props.onAddNumber(15)}>Добавить 15</button>
+          <button onClick={ () => this.props.onSubNumber(15)}>Вычесть 15</button>
+        </div>
+
+        <div className="Actions">
+          <button onClick={ () => this.props.onAsyncAdd(100)}>
+            Асинхронно добавить 100
+          </button>
         </div>
 
         <hr />
@@ -169,15 +181,17 @@ class App extends React.Component {
 
 function mapStateToProp(state) {
   return {
-    counter: state.counter
+    counter: state.counter1.counter
   }
 }
 
 function mapDispatchToProps(dispatch) {
    return {
-     onAdd: () => dispatch({type: 'ADD'}),
-     onSub: () => dispatch({type: 'SUB'}),
-     onAdd10: () => dispatch({type: 'ADD10'})
+     onAdd: () => dispatch(add()),
+     onSub: () => dispatch(sub()),
+     onAddNumber: number => dispatch(addNumber(number)),
+     onSubNumber: number => dispatch(subNumber(number)),
+     onAsyncAdd: number => dispatch(asyncAdd(number))
    }
 }
 

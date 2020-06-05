@@ -1,0 +1,5 @@
+export const ADD = 'ADD'
+export const SUB = 'SUB'
+export const ADDNUMBER = 'ADDNUMBER'
+export const SUBNUMBER = 'SUBNUMBER'
+export const ADD2 = 'ADD2'
